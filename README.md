@@ -1,4 +1,50 @@
-# Factor Models
+# Project Introduction
+This is a rough research survey about alpha trading. In this project, I built up a pipeline of alpha trading in cluding data processing, factor analysis, and model calibration. 
+
+## Dataset
+The dataset is not available as it is too large, here, I used Chinese A-stocks as an example (hard for free US equities' data). The data frame is multi-indexed similar to Quantopian's format. However, feel free to apply your own dataset.
+
+
+## Goal
+* **Equity Return Forecasting** 
+	
+	Using historical data including prices, external indexes (i.e. benchmark), cross-sectional factors (i.e. fundamentals, market factors). Since the model forecasting is based on the historical data, a appealing model should offer a stable forecast or less volatile on data chosen. APT framework is supposed to be good choice as far as I'm concerned.
+	
+* **Portfolio Risk Estimation**
+	
+	Mainly based on BARRA's model. For more details, go directly to the Multi-factor risk management part
+	
+## Model Classification
+* CAPM
+	- a kind of sigle-factor model
+	- usually, a validity benchmark for other models
+
+* APT
+	- factor returns are assumed to be known
+	- factor exposure can be regressed from factor returns
+	- aimed at forecasting
+	- how to fit: Fama-Macbeth Algorithm
+
+* Multi-Index Models
+	- statistical indogeneous model using factor analysis
+	- useful at factors parsimouny and decouple
+
+* Multi-Factor Risk Models(BARRA)
+	- factor exposures are assumed to be known (can be derived as the rescaled factor value)
+	- factor return can be regressed from factor exposures
+	- aimed at risk management
+	- how to fit: cross-sectional regression
+
+## Calibration Algorithms
+Here I used 2 traditional way add a novel Kalman filter technique (see KalmanFilter.ipynb or MultiFactorModel.ipynb)
+
+* Time-series regression (fix equity)
+* Cross-sectional regression (fix time-stamp)
+* Kalmn filter (dynamic model with gaussian noise)
+
+
+
+# Notes on Factor Models
 
 ## CAPM
 * Author: Markovitz(1959)
