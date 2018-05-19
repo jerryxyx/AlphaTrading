@@ -8,11 +8,19 @@ The dataset is not available as it is too large, here, I used Chinese A-stocks a
 ## Goal
 * **Equity Return Forecasting** 
 	
-	Using historical data including prices, external indexes (i.e. benchmark), cross-sectional factors (i.e. fundamentals, market factors). Since the model forecasting is based on the historical data, a appealing model should offer a stable forecast or less volatile on data chosen. APT framework is supposed to be good choice as far as I'm concerned.
-	
 * **Portfolio Risk Estimation**
 	
-	Mainly based on BARRA's model. For more details, go directly to the Multi-factor risk management part
+	- APT
+		- Risk Exposure: $\beta_{i,k}$
+		- Risk Premium: $P_k$
+		- Contribution of Risk Factor to Long Term Excess Return:
+		$$E[r_i] - TB = \sum_k \beta_{i,k}P_k$$
+	- BARRA
+		- Factor Return Covariance: V
+		- Portfolio Risk: $\sigma_p$
+		- Portfolio Risk Exposures: $$x_p=X^T h_p$$
+		- Marginal Contribution for Total Risk: $$MCTR = \frac{V h_p}{\sigma_p}$$
+		- Portfolio Risk-Adjusted Expected Return: $$U = h_p^T r - \lambda \cdot h_p^T V h_p$$
 	
 ## Model Classification
 * CAPM
@@ -40,7 +48,7 @@ Here I used 2 traditional way add a novel Kalman filter technique (see KalmanFil
 
 * Time-series regression (fix equity)
 * Cross-sectional regression (fix time-stamp)
-* Kalmn filter (dynamic model with gaussian noise)
+* Kalmn filter (APT model allowing risk exposure and risk premium to vary over time. In another word, a dynamic model with gaussian noise)
 
 
 
@@ -68,6 +76,8 @@ where $f_k(t)$ is the realization(value) of risk factor at time t
 * Exposure of each security on each factor
 * Risk premium on each factor
 $$(Mean[r_i(t)])_i = P_0 + \sum_{k=1}^K \beta_{ik} \cdot P_k$$
+or make $\beta_{0,k}$ equals 1 for each k,
+$$(Mean[r_i(t)])_i = \sum_{k=0}^K \bar{\beta}_{i,k} \cdot P_k$$
 where $P_0$ is the risk free return
 
 * Portfolio exposure to each factor
@@ -94,10 +104,17 @@ $$Portfolio_{it} = \beta_0 + \beta_k \cdot f_{kit}$$
 		4. bussiness cycle risk
 		5. market-timing risk
 
+### Generalizations
+The simplicity of APT framework is a great virtue. It is helpful to understand the true sources of stock returns. The basic APT model can be enhanced in many ways.
 
+* Allow risk prices $P_k$ to vary over time
+* Allow risk exposures $\beta_{i,k}$ to vary over time
+* Use Bayesian mothods to produce optimal out-of-sample forcasts for the risk exposures and hence for the expected returns
+* Introduce additional factor with zero-risk prices. Although do not contribute to expected return, help to explain the volatility.
 
-## Multi-Index Models
-Goal: Using historical return extract the factors
+## Multi-Index Models (Factor Analysis & PCA)
+###Goal
+Using historical return extract the factors
 
 $$r_{it} = \alpha_i + \sum_k \beta_{ik}\cdot f_{kt}$$
 where
@@ -108,20 +125,20 @@ $f_{kt}$: the return on index k inperiod t
 
 $\beta$: sensitivities
 
-#### Estimation
+### Estimation
 Either exposure or factor return can be asserted on a priori grounds with the other identified empirically, or both can be identified empirically.
 
-#### Characteristics
+### Characteristics
 * Have f(indexes) represents separate influence
 * The structure must be parsimonious: the returns can be described in terms of limited indexes
 
-#### Statistical Solutions
+### Statistical Solutions
 Let the data design the model
 
 * PCA
 * Factor Analysis: better in heteroscedastic series
 
-#### Design Issue
+### Design Issue
 * **The Choice of Data**: Individul stocks vs portfolio
 * **The number of Index**:
 	- Stactical techniques: Factor analysis, PCA 
@@ -131,7 +148,7 @@ Let the data design the model
 	- Roll and Ross: Multisample approach
 	- Chen: Portfolio approach
 
-#### Applications
+### Applications
 * **Identify the Indexes set**
 * **Determine the number of factors**: PCA / Factor Analysis
 	- Single-group tests for each sample
@@ -162,12 +179,12 @@ Let the data design the model
 	
 * **Explanatory Power** of the Model for Each Stock: R2>0.7 excellent
 
-#### Conclusions
+### Conclusions
 * Goodness: simultaneously estimate the indexes and sensitivities in a multi-index model
-* Defect: Using return to explain return
+* Defect: Data Minning: Using return to explain return
 
 
-## Multi-Factor Models for Portfolio Risk (Barra)
+## Multi-Factor Models for Portfolio Risk (BARRA)
 
 $$r_{i,t} = a_{i,t} + X_{i,k,t} \cdot f_{k,t}$$
 where
@@ -191,6 +208,8 @@ A portfolio described by an N-element vector $h_i$
 * portfolio variance: $\sigma_p^2 = x_p^T F x_p + h_p^T \Delta h_p = h_p^T V h_p$
 * Marginal Contribution for Total Risk
 $$MCTR = \frac{V h_p}{\sigma_p}$$
+* Risk-adjusted expected return:
+$$U = h_p^T r_p - \lambda\cdot h_p^T V h_p$$
 
 
 #### Choosing the Factors
