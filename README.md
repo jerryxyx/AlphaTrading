@@ -1,6 +1,14 @@
 # Project Introduction
 This is a rough research survey about alpha trading. In this project, I built up a pipeline of alpha trading in cluding data processing, factor analysis, and model calibration. 
 
+## Codes
+
+* rqdata_utils.py: Utils dealing with the rice quant platform data
+
+* FactorAnalysis.ipynb: Factor returns profile visulization
+
+* BARRA.ipynb: BARRA's risk model with three calibration schemes: cross-sectional regression, global gradient descend, and Kalman filter.
+
 ## Dataset
 The dataset is not available as it is too large, here, I used Chinese A-stocks as an example (hard for free US equities' data). The data frame is multi-indexed similar to Quantopian's format. However, feel free to apply your own dataset.
 
