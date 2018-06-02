@@ -1,6 +1,22 @@
 # Project Introduction
 This is a rough research survey about alpha trading. In this project, I built up a pipeline of alpha trading in cluding data processing, factor analysis, and model calibration. 
 
+## Files
+
+* rqdata_utils.py: Utils dealing with the rice quant platform data
+
+* FactorAnalysis.ipynb: Factor returns profile visulization
+	- Factor Return Patterns: 
+		- return quantile plot
+	- Pattern Stability:
+		- turnover tear sheet
+		- rank autocorrelation
+
+* BARRA.ipynb: BARRA's risk model with three calibration schemes:
+	- cross-sectional regression
+	- global gradient descend
+	- kalman filter
+
 ## Dataset
 The dataset is not available as it is too large, here, I used Chinese A-stocks as an example (hard for free US equities' data). The data frame is multi-indexed similar to Quantopian's format. However, feel free to apply your own dataset.
 
@@ -50,9 +66,15 @@ Here I used 2 traditional way add a novel Kalman filter technique (see KalmanFil
 * Cross-sectional regression (fix time-stamp)
 * Kalmn filter (APT model allowing risk exposure and risk premium to vary over time. In another word, a dynamic model with gaussian noise)
 
+## Improvements
 
+* A percentage rank test is a good alternative to a z score
+* Beware of quarterly ratios (referring to ROA, ROE, gross margin, etc.)
+* Factor for quality: gross profitability a la Novy-Marx (2013). It's simply gross profits divided by total assets.
+* Substituting ROA/Gross Margin with gross profitability
+* 
 
-# Notes on Factor Models
+# Appendix: Notes on Factor Models
 
 ## CAPM
 * Author: Markovitz(1959)

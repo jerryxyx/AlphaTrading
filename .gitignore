@@ -20,9 +20,9 @@ __pycache__/
 
 # Images #
 ###################
-*.jpg
+#*.jpg
 *.gif
-*.png
+#*.png
 *.svg
 *.ico
 
