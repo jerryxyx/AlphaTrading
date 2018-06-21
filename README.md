@@ -1,7 +1,17 @@
-# Project Introduction
-This is a rough research survey about alpha trading. In this project, I built up a pipeline of alpha trading in cluding data processing, factor analysis, and model calibration. 
+# Multi-Factor Models
 
-## Files
+Author: Jerry Xia
+
+Date: 2018/05/21
+
+*Note: The advanced Marckdown features such as math expression may not be compatible in GitHub, please see README.pdf instead if you want more details*
+
+
+
+## Project Introduction
+This is a research survey about alpha trading. In this project, I built up a pipeline of alpha trading in cluding data processing, factor analysis, and model calibration. The models involed are APT models, BARRA's risk models and dynamic factors model using Kalman filter.
+
+### Files
 
 * rqdata_utils.py: Utils dealing with the rice quant platform data
 
@@ -17,11 +27,13 @@ This is a rough research survey about alpha trading. In this project, I built up
 	- global gradient descend
 	- kalman filter
 
-## Dataset
+* KalmanFilter.ipynb: Dynamic multi-factor model
+
+### Dataset
 The dataset is not available as it is too large, here, I used Chinese A-stocks as an example (hard for free US equities' data). The data frame is multi-indexed similar to Quantopian's format. However, feel free to apply your own dataset.
 
 
-## Goal
+### Goal
 * **Equity Return Forecasting** 
 	
 * **Portfolio Risk Estimation**
@@ -38,7 +50,7 @@ The dataset is not available as it is too large, here, I used Chinese A-stocks a
 		- Marginal Contribution for Total Risk: $$MCTR = \frac{V h_p}{\sigma_p}$$
 		- Portfolio Risk-Adjusted Expected Return: $$U = h_p^T r - \lambda \cdot h_p^T V h_p$$
 	
-## Model Classification
+### Model Classification
 * CAPM
 	- a kind of sigle-factor model
 	- usually, a validity benchmark for other models
@@ -59,14 +71,14 @@ The dataset is not available as it is too large, here, I used Chinese A-stocks a
 	- aimed at risk management
 	- how to fit: cross-sectional regression
 
-## Calibration Algorithms
+### Calibration Algorithms
 Here I used 2 traditional way add a novel Kalman filter technique (see KalmanFilter.ipynb or MultiFactorModel.ipynb)
 
 * Time-series regression (fix equity)
 * Cross-sectional regression (fix time-stamp)
 * Kalmn filter (APT model allowing risk exposure and risk premium to vary over time. In another word, a dynamic model with gaussian noise)
 
-## Improvements
+### Improvements
 
 * A percentage rank test is a good alternative to a z score
 * Beware of quarterly ratios (referring to ROA, ROE, gross margin, etc.)
@@ -74,19 +86,19 @@ Here I used 2 traditional way add a novel Kalman filter technique (see KalmanFil
 * Substituting ROA/Gross Margin with gross profitability
 * 
 
-# Appendix: Notes on Factor Models
+## Appendix: Notes on Factor Models
 
-## CAPM
+### CAPM
 * Author: Markovitz(1959)
 * single-factor: 
 * explain: security returns
 
-## APT
+### APT
 * Author: Stephen A. Ross(1976)
 * multi-factor
 * explain: security returns
 
-### Postulates:
+#### Postulates:
 - The linear model
 $$r_i(t) - \alpha_i = \sum_{k=1}^K \beta_{ik} \cdot f_k(t) + \epsilon_i(t)$$
 
@@ -94,7 +106,7 @@ where $f_k(t)$ is the realization(value) of risk factor at time t
 
 - No pure arbitrage profit
 
-### Conclusion
+#### Conclusion
 * Exposure of each security on each factor
 * Risk premium on each factor
 $$(Mean[r_i(t)])_i = P_0 + \sum_{k=1}^K \beta_{ik} \cdot P_k$$
@@ -107,7 +119,7 @@ $$Portfolio_{it} = \beta_0 + \beta_k \cdot f_{kit}$$
 
 
 
-### Three alternative calibration methods
+#### Three alternative calibration methods
 * **statistical techniques** such as factor analysis, principle analysis
 	- **Goodness**: good for determining the number of relevent risk factors
 	- **Undesirable**: hard to interpret
@@ -126,7 +138,7 @@ $$Portfolio_{it} = \beta_0 + \beta_k \cdot f_{kit}$$
 		4. bussiness cycle risk
 		5. market-timing risk
 
-### Generalizations
+#### Generalizations
 The simplicity of APT framework is a great virtue. It is helpful to understand the true sources of stock returns. The basic APT model can be enhanced in many ways.
 
 * Allow risk prices $P_k$ to vary over time
@@ -134,8 +146,9 @@ The simplicity of APT framework is a great virtue. It is helpful to understand t
 * Use Bayesian mothods to produce optimal out-of-sample forcasts for the risk exposures and hence for the expected returns
 * Introduce additional factor with zero-risk prices. Although do not contribute to expected return, help to explain the volatility.
 
-## Multi-Index Models (Factor Analysis & PCA)
-###Goal
+### Multi-Index Models (Factor Analysis & PCA)
+
+#### Goal
 Using historical return extract the factors
 
 $$r_{it} = \alpha_i + \sum_k \beta_{ik}\cdot f_{kt}$$
@@ -147,20 +160,20 @@ $f_{kt}$: the return on index k inperiod t
 
 $\beta$: sensitivities
 
-### Estimation
+#### Estimation
 Either exposure or factor return can be asserted on a priori grounds with the other identified empirically, or both can be identified empirically.
 
-### Characteristics
+#### Characteristics
 * Have f(indexes) represents separate influence
 * The structure must be parsimonious: the returns can be described in terms of limited indexes
 
-### Statistical Solutions
+#### Statistical Solutions
 Let the data design the model
 
 * PCA
 * Factor Analysis: better in heteroscedastic series
 
-### Design Issue
+#### Design Issue
 * **The Choice of Data**: Individul stocks vs portfolio
 * **The number of Index**:
 	- Stactical techniques: Factor analysis, PCA 
@@ -170,7 +183,7 @@ Let the data design the model
 	- Roll and Ross: Multisample approach
 	- Chen: Portfolio approach
 
-### Applications
+#### Applications
 * **Identify the Indexes set**
 * **Determine the number of factors**: PCA / Factor Analysis
 	- Single-group tests for each sample
@@ -201,12 +214,12 @@ Let the data design the model
 	
 * **Explanatory Power** of the Model for Each Stock: R2>0.7 excellent
 
-### Conclusions
+#### Conclusions
 * Goodness: simultaneously estimate the indexes and sensitivities in a multi-index model
 * Defect: Data Minning: Using return to explain return
 
 
-## Multi-Factor Models for Portfolio Risk (BARRA)
+### Multi-Factor Models for Portfolio Risk (BARRA)
 
 $$r_{i,t} = a_{i,t} + X_{i,k,t} \cdot f_{k,t}$$
 where
