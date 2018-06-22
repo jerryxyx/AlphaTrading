@@ -2,13 +2,12 @@
 
 Analyst: Yuxuan Xia
 
-Date: 2018/06/01
+Date: 2018/06/04
 
 ## TODO
 
 * Input more effective factors: take advice from people and industry reports
-* Quaterly Data and Annually data, how to use them? Decrease the system frequency to quaterly?
-* Improve perfomance through deep learning or statistical models?
+* Should add technical analysis, because it matters! People care about them and then make it good sentimental indexes.
 * Find well-known metrics to express results
 
 ## Workflow
@@ -42,6 +41,7 @@ Date: 2018/06/01
 		- Fama-Macbeth regression
 	* $\vartriangle$Factors combination
 		- PCA, FA
+		- Techniqual Analaysis
 		- Financial Modeling
 		- Linear combination to maximize Sharpe ratio
 		- Non-linear learning algorithms
@@ -54,9 +54,9 @@ Date: 2018/06/01
 ## Factors' Correlations
 Here, I use correlation matrix as the measure. The difference from the second result is that the correlation matrix is calculated by the rank data rather than the raw data
 ### Two ICs comparison
-* Pearson's IC: If the sample size is moderate or large and the population is normal, then, in the case of the bivariate normal distribution, the sample correlation coefficient is the maximum likelihood estimate of the population correlation coefficient, and is asymptotically unbiased and efficient, which roughly means that it is impossible to construct a more accurate estimate than the sample correlation coefficient. The number itself has no sense if you don't find a proper way or "common sense" to interpret it. Multi-variate Gaussian distribution give us such a common sense of how it should looks like.
+* Pearson's IC: measures linear relationship between components
 
-* Spearman's IC: while Pearson's correlation assesses linear relationships, Spearman's correlation assesses monotonic relationships (whether linear or not). Since We only care about the monotonic relationships. Spearman's IC wins.
+* Spearman's IC: measures monotonic relationship between components. Since We only care about the monotonic relationships. Spearman's IC wins.
 
 
 ### Regular IC(Pearson's correlation coefficient) for each factors
@@ -88,7 +88,22 @@ Ahthogh the price in sales_yield formula is vague in our data source we can see 
 ### Rank of the Spearman's rank IC (absolute value) for factors vs. forward returns
 ![](rank of mean spearmans rank IC (absolute value).png)
 
-## Alpha Factor Combination
+## Factors Preprocessing
+* Get ranked data
+* Obtain the valid stocks set
+* Reshape the data: only valid stocks set
+* Fill null: using daily average
+* Rescale the data: MinMaxScaler
+* Variet reduction: PCA analysis
+* Sanity check
+
+![](corr comparison after pca analysis.png)
+
+Here, I use principle component analysis because it can brings two benefits to our data - orthogonality and dimensionality reduction. Orthogonality makes data more separate, less dimensionality makes information more concentrated. Either of them is essential for machine learning algorithms.
+
+In the next part, I used this preprocessed data as the input to obtain a "mega alpha".
+
+## Mega Alpha
 construct an aggregate alpha factor which has its return distribution profitable. The term "profitable" here means condense, little turnover, significant in the positive return.
 ### Methods
 #### linear methods
@@ -110,12 +125,17 @@ The algorithm sequentially applies a weak classification to modified versions of
 ![](adaboost_algorithm.png)
 
 #### Train set
+The adaboost classifier was applied to our fundamental dataset. The objective is to train a classifier which give a score for the bunch of factors. Or in other word, the mega alpha. Pink for the positive forward returns observations and blue for the negative forward returns observations. A good score system is to make the two classes more separated.
 ![](train_score_dist.png)
+We can see, in train set, AdaBoost classifier did so well! The next plot is the precision in each quantile of scores. In the top and bottom quantile, the predicted precision is nearly 100%!
 ![](train_accuracy_bar.png)
 
 #### Test set
+alpha values histogram
 ![](test_score_dist.png)
+quantile precision bar plot
 ![](test_accuracy_bar.png)
+The precision in the top and bottom quantile is only slightly higher than 50%. Far from good if we considered transaction cost. Frankly, there are plenty of works should be done before we get some satisfied results. Anyway, this pipeline gives us a flexible routine and a judgement system. I'll continue to tweak the routine and factors to make sure it goes on the right direction.
 
 ## References
 * Jonathan Larkin, *A Professional Quant Equity Workflow*. August 31, 2016
