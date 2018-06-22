@@ -12,11 +12,11 @@ Date: 2018/06/01
 * Find well-known metrics to express results
 
 ## Workflow
-$\checkmark$ stands for finished and $\vartriangle$ stands for TODO
+\checkmark stands for finished and \vartriangle stands for TODO
 
 * Universe definition
 * Factors collection and preprocessing
-	* $\vartriangle$Factors collection
+	* $\vartriangle$ Factors collection
 		- Sources
 			- balance sheet
 			- cash flow statement
@@ -77,7 +77,7 @@ Ahthogh the price in sales_yield formula is vague in our data source we can see 
 * Spearman's rank correlation coefficients
 * Fama-Macbeth regression: Not only consider the foreseeability of factors itself but also consider the co-vary of different factors, which means rule out factors if the returns can be explained by the recent factors.
 
- 
+
 ### Spearman's rank IC for factors vs. forward returns
 
 ![](mean spearmans rank IC.png)
