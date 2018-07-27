@@ -100,9 +100,9 @@ Here, I use correlation matrix as the measure. The difference from the second re
 
 
 ### Regular IC(Pearson's correlation coefficient) for each factors
-![](report/Corr matrix for raw factors.png)
+![](report/Corr_matrix_for_raw_factors.png)
 ### Spearman's Rank correlation coefficient for each factors
-![](report/Corr matrix for factor ranks.png)
+![](report/Corr_matrix_for_factor_ranks.png)
 
 ### How to rule out redundant factors and why Spearman's rank correlation coefficients?
 From the correlation coefficients below, we can again conclude that Spearman's rank IC is far more robust. Take ps_ratio and sales_yield as a example.
@@ -120,13 +120,13 @@ Ahthogh the price in sales_yield formula is vague in our data source we can see 
  
 ### Spearman's rank IC for factors vs. forward returns
 
-![](report/mean spearmans rank IC.png)
+![](report/mean_spearmans_rank_IC.png)
 
 ### Spearman's rank IC (absolute value) for factors vs. forward returns
-![](report/mean spearmans rank IC (absolute value).png)
+![](report/mean_spearmans_rank_IC_absolute_value.png)
 
 ### Rank of the Spearman's rank IC (absolute value) for factors vs. forward returns
-![](report/rank of mean spearmans rank IC (absolute value).png)
+![](report/rank_of_mean_spearmans_rank_IC_absolute_value.png)
 
 ## Factors Preprocessing
 * Get ranked data
@@ -137,7 +137,7 @@ Ahthogh the price in sales_yield formula is vague in our data source we can see 
 * Variet reduction: PCA analysis
 * Sanity check
 
-![](report/corr comparison after pca analysis.png)
+![](report/corr_comparison_after_pca_analysis.png)
 
 Here, I use principle component analysis because it can brings two benefits to our data - orthogonality and dimensionality reduction. Orthogonality makes data more separate, less dimensionality makes information more concentrated. Either of them is essential for machine learning algorithms.
 
