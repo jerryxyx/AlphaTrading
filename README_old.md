@@ -2,7 +2,7 @@
 
 Author: Jerry Xia
 
-Date: 2018/07/27
+Date: 2018/05/21
 
 *Note: The advanced Marckdown features such as math expression may not be compatible in GitHub, please see README.pdf instead if you want more details*
 
@@ -41,124 +41,58 @@ The dataset is not available in GitHub as it is too large. Except for Step3\_Fac
 The data frame is multi-indexed similar to Quantopian's format(see both Alphalens github codes and rqdata_utils.py). However, feel free to cast and apply your own dataset.
 
 
-## TODO
+### Goal
+* **Equity Return Forecasting** 
+	
+* **Portfolio Risk Estimation**
+	
+	- APT
+		- Risk Exposure: $\beta_{i,k}$
+		- Risk Premium: $P_k$
+		- Contribution of Risk Factor to Long Term Excess Return:
+		$$E[r_i] - TB = \sum_k \beta_{i,k}P_k$$
+	- BARRA
+		- Factor Return Covariance: V
+		- Portfolio Risk: $\sigma_p$
+		- Portfolio Risk Exposures: $$x_p=X^T h_p$$
+		- Marginal Contribution for Total Risk: $$MCTR = \frac{V h_p}{\sigma_p}$$
+		- Portfolio Risk-Adjusted Expected Return: $$U = h_p^T r - \lambda \cdot h_p^T V h_p$$
+	
+### Model Classification
+* CAPM
+	- a kind of sigle-factor model
+	- usually, a validity benchmark for other models
 
-* Input more effective factors: take advice from people and industry reports
-* Should add technical analysis, because it matters! People care about them and then make it good sentimental indexes.
-* Find well-known metrics to express results
+* APT
+	- factor returns are assumed to be known
+	- factor exposure can be regressed from factor returns
+	- aimed at forecasting
+	- how to fit: Fama-Macbeth Algorithm
 
-## Workflow
-$\checkmark$ stands for finished and $\vartriangle$ stands for TODO
+* Multi-Index Models
+	- statistical indogeneous model using factor analysis
+	- useful at factors parsimouny and decouple
 
-* Universe definition
-* Factors collection and preprocessing
-	* $\vartriangle$Factors collection
-		- Sources
-			- balance sheet
-			- cash flow statement
-			- income statement
-			- earning report
-		- Econometric Classifications
-			- value
-			- growth
-			- profitability
-			- market size
-			- liquidity
-			- volatility
-			- Momentom
-			- Financial leverage (debt-to-equity ratio)
-	* Factors preprocessing
-		- $\vartriangle$daily, quaterly, annually
-		- continuous: rescale, outliers
-		- $\checkmark$discrete: rank
-* Factors screening and combination
-	* Factors screening
-		- $\checkmark$Factors' correlation
-		- $\checkmark$Factors' foreseeablity
-		- Fama-Macbeth regression
-	* $\vartriangle$Factors combination
-		- PCA, FA
-		- Techniqual Analaysis
-		- Financial Modeling
-			- $\checkmark$APT model
-			- $\checkmark$Barra's risk model
-			- $\checkmark$Dynamic multi-factors model
-		- Linear combination to maximize Sharpe ratio
-		- Non-linear learning algorithms
-			- $\checkmark$AdaBoost
-			- Reinforcement learning
+* Multi-Factor Risk Models(BARRA)
+	- factor exposures are assumed to be known (can be derived as the rescaled factor value)
+	- factor return can be regressed from factor exposures
+	- aimed at risk management
+	- how to fit: cross-sectional regression
 
-* Portfolio allocation
+### Calibration Algorithms
+Here I used 2 traditional way add a novel Kalman filter technique (see KalmanFilter.ipynb or MultiFactorModel.ipynb)
 
+* Time-series regression (fix equity)
+* Cross-sectional regression (fix time-stamp)
+* Kalmn filter (APT model allowing risk exposure and risk premium to vary over time. In another word, a dynamic model with gaussian noise)
 
-## Factors' Correlations
-Here, I use correlation matrix as the measure. The difference from the second result is that the correlation matrix is calculated by the rank data rather than the raw data
-### Two ICs comparison
-* Pearson's IC: measures linear relationship between components
+### Improvements
 
-* Spearman's IC: measures monotonic relationship between components. Since We only care about the monotonic relationships. Spearman's IC wins.
-
-
-### Regular IC(Pearson's correlation coefficient) for each factors
-![](report/Corr matrix for raw factors.png)
-### Spearman's Rank correlation coefficient for each factors
-![](report/Corr matrix for factor ranks.png)
-
-### How to rule out redundant factors and why Spearman's rank correlation coefficients?
-From the correlation coefficients below, we can again conclude that Spearman's rank IC is far more robust. Take ps_ratio and sales_yield as a example.
-$$ps\_ratio = \frac{\mbox{adjusted close price}}{\mbox{sales per share}}$$
-whereas
-$$sales\_yield = \frac{\mbox{sales per share}}{\mbox{price}}$$
-Ahthogh the price in sales_yield formula is vague in our data source we can see roughly speaking, these two variable should be inverse of each other. The Spearman's rank correlation coefficient is -0.98 which verifies this statement, and we should avoid using both of these factors, which would exeggarate the impact of this peticular factor. However, we can not see such identity in the Pearson's regular correlation coefficients. It's quite misleading actually and that's why we choose Spearman's rank IC.
-
-## Factors' Foreseeability
-
-### Methods
-* Spearman's rank correlation coefficients
-* Fama-Macbeth regression: Not only consider the foreseeability of factors itself but also consider the co-vary of different factors, which means rule out factors if the returns can be explained by the recent factors.
-
- 
-### Spearman's rank IC for factors vs. forward returns
-
-![](report/mean spearmans rank IC.png)
-
-### Spearman's rank IC (absolute value) for factors vs. forward returns
-![](report/mean spearmans rank IC (absolute value).png)
-
-### Rank of the Spearman's rank IC (absolute value) for factors vs. forward returns
-![](report/rank of mean spearmans rank IC (absolute value).png)
-
-## Factors Preprocessing
-* Get ranked data
-* Obtain the valid stocks set
-* Reshape the data: only valid stocks set
-* Fill null: using daily average
-* Rescale the data: MinMaxScaler
-* Variet reduction: PCA analysis
-* Sanity check
-
-![](report/corr comparison after pca analysis.png)
-
-Here, I use principle component analysis because it can brings two benefits to our data - orthogonality and dimensionality reduction. Orthogonality makes data more separate, less dimensionality makes information more concentrated. Either of them is essential for machine learning algorithms.
-
-In the next part, I used this preprocessed data as the input to obtain a "mega alpha".
-
-## Mega Alpha
-construct an aggregate alpha factor which has its return distribution profitable. The term "profitable" here means condense, little turnover, significant in the positive return.
-### Methods
-#### linear methods
-* normalize factors and try a linear combination 
-* rank each factor and then sum up
-* Financial modeling: **See the appendix and Step3\_FactorCombination\_BarraKalmanFilter.ipynb**
-* linear combination to maximize Sharpe ratio
-
-#### Non-linear methods
-* AdaBoost: **See Step3\_FactorCombination\_AdaBoost\_Quantopian.ipynb**
-* Reinforement Learning
-
-
-Here we only introduce AdaBoost algorithm in this documentation. For more details about the linear models, please See the appendix and Step3\_FactorCombination\_BarraKalmanFilter.ipynb.
-
+* A percentage rank test is a good alternative to a z score
+* Beware of quarterly ratios (referring to ROA, ROE, gross margin, etc.)
+* Factor for quality: gross profitability a la Novy-Marx (2013). It's simply gross profits divided by total assets.
+* Substituting ROA/Gross Margin with gross profitability
+* 
 
 ## Appendix: Notes on Factor Models
 
