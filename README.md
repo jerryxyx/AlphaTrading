@@ -159,6 +159,38 @@ construct an aggregate alpha factor which has its return distribution profitable
 
 Here we only introduce AdaBoost algorithm in this documentation. For more details about the linear models, please See the appendix and Step3\_FactorCombination\_BarraKalmanFilter.ipynb.
 
+### AdaBoost
+#### Description
+The algorithm sequentially applies a weak classification to modified versions of the data. By increasing the weights of the missclassified observations, each weak learner focuses on the error of the previous one. The predictions are aggregated through a weighted majority vote.
+
+#### Algorithm
+
+![](report/adaboost_algorithm.png)
+
+#### Train set
+The adaboost classifier was applied to our fundamental dataset. The objective is to train a classifier which give a score for the bunch of factors. Or in other word, the mega alpha. Pink for the positive forward returns observations and blue for the negative forward returns observations. A good score system is to make the two classes more separated.
+![](report/train_score_dist.png)
+We can see, in train set, AdaBoost classifier did so well! The next plot is the precision in each quantile of scores. In the top and bottom quantile, the predicted precision is nearly 100%!
+![](report/train_accuracy_bar.png)
+
+#### Test set
+alpha values histogram
+![](report/test_score_dist.png)
+quantile precision bar plot
+![](report/test_accuracy_bar.png)
+The precision in the top and bottom quantile is only slightly higher than 50%. Far from good if we considered transaction cost. Frankly, there are plenty of works should be done before we get some satisfied results. Anyway, this pipeline gives us a flexible routine and a judgement system. I'll continue to tweak the routine and factors to make sure it goes on the right direction.
+
+## References
+* Jonathan Larkin, *A Professional Quant Equity Workflow*. August 31, 2016
+* *A Practitioner‘s Guide to Factor Models*. The Research Foundation of The Institute of Chartered Financial Analysts
+* Thomas Wiecki, Machine Learning on Quantopian
+* Inigo Fraser Jenkins, *Using factors with different alpha decay times: The case for non-linear combination* 
+* PNC, *Factor Analysis: What Drives Performance?*
+* O’Shaughnessy, *Alpha or Assets? — Factor Alpha vs. Smart Beta*. April 2016
+* *O’Shaughnessy Quarterly Investor Letter Q1 2018* 
+* Jiantao Zhu, Orient Securities, *Alpha Forecasting - Factor-Based Strategy Research Series 13*
+* Yang Song, Bohai Securities, *Multi-Factor Models Research: Single Factor Testing*, 2017/10/11
+
 
 ## Appendix: Notes on Factor Models
 
