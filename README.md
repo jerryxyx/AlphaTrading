@@ -117,7 +117,7 @@ Ahthogh the price in sales_yield formula is vague in our data source we can see 
 * Spearman's rank correlation coefficients
 * Fama-Macbeth regression: Not only consider the foreseeability of factors itself but also consider the co-vary of different factors, which means rule out factors if the returns can be explained by the recent factors.
 
- 
+
 ### Spearman's rank IC for factors vs. forward returns
 
 ![](report/mean_spearmans_rank_IC.png)
@@ -134,7 +134,7 @@ Ahthogh the price in sales_yield formula is vague in our data source we can see 
 * Reshape the data: only valid stocks set
 * Fill null: using daily average
 * Rescale the data: MinMaxScaler
-* Variet reduction: PCA analysis
+* Variable reduction: PCA analysis
 * Sanity check
 
 ![](report/corr_comparison_after_pca_analysis.png)
@@ -178,7 +178,11 @@ alpha values histogram
 ![](report/test_score_dist.png)
 quantile precision bar plot
 ![](report/test_accuracy_bar.png)
-The precision in the top and bottom quantile is only slightly higher than 50%. Far from good if we considered transaction cost. Frankly, there are plenty of works should be done before we get some satisfied results. Anyway, this pipeline gives us a flexible routine and a judgement system. I'll continue to tweak the routine and factors to make sure it goes on the right direction.
+The precision in the top and bottom quantile is only slightly higher than 50%. Far from good if we considered transaction cost. 
+
+So, I added some technical analysis factors to see if we can tackle this problem.
+![](report/train_score_dist2.png)
+Surprisingly, even the average accuracy in test set is about 67%. What if we only trade the extreme quantile? That is around 80% accuracy! It literally shows that technical factors are really important in US stock market and can be used to find arbitrage opportunity.
 
 ## References
 * Jonathan Larkin, *A Professional Quant Equity Workflow*. August 31, 2016
